@@ -130,7 +130,7 @@ router.post('/verify', async (ctx, next) => {
   let transporter = nodeMailer.createTransport({
     host: Email.smtp.host,
     port: 587,
-    secure: false,
+    secure: false, // true表示监听默认端口465，false表示监听其它端口
     auth: {
       user: Email.smtp.user,
       pass: Email.smtp.pass
@@ -152,7 +152,7 @@ router.post('/verify', async (ctx, next) => {
     if (error) {
       return console.log(error)
     } else {
-      sessionStorage.hmset(`nodemail:${ko.user}`, 'code', ko.code, 'expire', ko.expire, 'email', ko.email)
+      Store.hmset(`nodemail:${ko.user}`, 'code', ko.code, 'expire', ko.expire, 'email', ko.email)
     }
   })
   ctx.body = {
@@ -164,7 +164,7 @@ router.post('/verify', async (ctx, next) => {
 // 退出接口
 router.get('/logout', async (ctx, next) => {
   await ctx.logout()
-  if (!ctx.isAuthenticated()) {
+  if (!ctx.isAuthenticated()) { // 检查是否是登录状态
     ctx.body = {
       code: 0
     }
