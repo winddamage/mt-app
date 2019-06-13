@@ -13,7 +13,7 @@ let router = new Router({
   prefix: '/users'
 })
 
-let Store = new Redis().client
+let Store = new Redis().client // 注册redis客户端
 
 // 注册接口
 router.post('/signup', async (ctx) => {
